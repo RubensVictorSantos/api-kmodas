@@ -1,7 +1,8 @@
 const { Sequelize } = require("sequelize");
+const con = require("./configdb") 
 
-const sequelize = new Sequelize("kmodas", "root", "Ladera*610892", {
-    host: "localhost",
+const sequelize = new Sequelize(con.database, con.user, con.password, {
+    host: con.host,
     dialect: "mysql",
     define: {
         underscored: true,
@@ -10,6 +11,7 @@ const sequelize = new Sequelize("kmodas", "root", "Ladera*610892", {
 });
 
 try {
+    
     console.log("\n Database connection success!\n");
 
 } catch (error) {
