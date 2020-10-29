@@ -3,6 +3,8 @@ const connection = require("../database");
 
 Produto.init(connection);
 
+
+
 module.exports = {
     async selectAll(req, res) {
 
@@ -11,6 +13,18 @@ module.exports = {
         let allProd = await Produto.findAll();
 
         return res.json(allProd);
+    },
+
+    async selectFirstHundred(req, res) {
+
+        console.log("\n----------------- GET BY FIRST HUNDRED -----------------");
+
+        let prodStatus = await Produto.findAll({
+            order: [[ 'cod_prod', 'DESC']],
+            limit: 100
+        });
+
+        return res.json(prodStatus);
     },
 
     async selectWhereStatusOn(req, res) {
@@ -24,10 +38,23 @@ module.exports = {
         return res.json(prodStatus);
     },
 
+    async selectFirstHundredStatusOn(req, res) {
+
+        console.log("\n----------------- GET BY FIRST HUNDRED WITH STATUS ON -----------------");
+
+        let prodStatus = await Produto.findAll({
+            where: { status_prod: 1 },
+            order: [[ 'cod_prod', 'DESC']],
+            limit: 100
+        });
+
+        return res.json(prodStatus);
+    },
+
     async selectById(req, res) {
         const codProd = req.params.cod_prod;
 
-        console.log("----------------- GET BY ID -----------------\n");
+        console.log("\n----------------- GET BY ID -----------------");
 
         const prod = await Produto.findByPk(codProd);
 
