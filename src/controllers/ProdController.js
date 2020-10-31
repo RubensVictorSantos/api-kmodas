@@ -60,7 +60,7 @@ module.exports = {
     },
 
     async insert(req, res) {
-        const { nome_prod, preco_prod, descricao_prod, status_prod } = req.body
+        const { nome_prod, preco_prod, img_prod, descricao_prod, status_prod } = req.body
 
         console.log("----------------- INSERT -----------------");
 
@@ -79,8 +79,6 @@ module.exports = {
 
         const cod_prod = req.params.id;
         const produto = await Produto.findByPk(cod_prod);
-
-        console.log(req.file.filename);
 
         await Produto.update({
             img_prod: req.file.filename

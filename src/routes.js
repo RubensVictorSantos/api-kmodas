@@ -3,7 +3,7 @@ const routes = express.Router();
 const multer = require("multer");
 const multerConfig = require("./config/Multer");
 const prodController = require('./controllers/ProdController');
-
+const imagemController = require('./controllers/ImgController');
 /** Rotas Produtos */
 
 routes.get("/allProd",prodController.selectAll);
@@ -19,5 +19,9 @@ routes.patch("/updateProd",prodController.update);
 routes.post("/addProd",prodController.insert);
 
 routes.delete("/delProd",prodController.delete);
+
+/** Rotas Imagem */
+
+routes.post("/insertimagem",multer(multerConfig).single("imagem"),imagemController.insert);
 
 module.exports = routes;

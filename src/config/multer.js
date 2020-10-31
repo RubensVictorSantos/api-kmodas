@@ -10,32 +10,39 @@ if(!fs.existsSync(dir)){
 
 module.exports = {
 
-    dest: path.resolve(dir) ,
+    /** Storage: Onde armazenar os arquivos */
     storage:multer.diskStorage({
+
+        /**Destination: Difine a pasta na qual o arquivo foi salvo */
         destination: (req,file,cb)=>{
 
-            console.log("\nMulter destination:\n----------------\n"+path+"\n----------------");
-
+            /** Path: Caminho completo para o arquivo enviado */
             cb(null,path.resolve(dir));
         },
 
+        /** Filename: Nome do arquivo dentro do destination */
         filename: (req,file,cb)=>{
+
+            /** Criptografando o nome do arquivo (filename) */
             crypto.randomBytes(16,(err,hash)=>{
                 if(err){
                     cb(err)
                 }
-                const fileName = `${hash.toString('hex')}-${file.originalname}`;
 
-                console.log("\nMulter filename:\n----------------\n"+fileName+"\n----------------");
+                const fileName = `${hash.toString('hex')}-${file.originalname}`;
 
                 cb(null,fileName);
                  
             })
         }
-    }), 
+    }),
+    
+    /** Limits: Limites dos dados enviados */
     limits:{
         fileSize: 2 * 1024 * 1024
     },
+
+    /** FileFilter:	Função para controlar quais arquivos são aceitos */
     fileFilter: (req,file,cb)=>{
         const allowedMimes = [
             "image/jpeg",
@@ -45,11 +52,11 @@ module.exports = {
         ];
 
         if(allowedMimes.includes(file.mimetype)){
-            
-            console.log("\nMulter fileFilter:\n----------------\n" + JSON.stringify(file) +"\n"+ allowedMimes +"\n----------------")
             cb(null,true);
+
         }else{
             cb(new Error("Invalid file type."));
+       
         }
     }
 }
