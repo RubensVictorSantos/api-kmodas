@@ -1,24 +1,26 @@
 const express = require('express');
-const routes = express.Router();
 const multer = require("multer");
 const multerConfig = require("./config/Multer");
 const prodController = require('./controllers/ProdController');
 const imagemController = require('./controllers/ImgController');
+const routes = express.Router();
+
 /** Rotas Produtos */
 
-routes.get("/allProd",prodController.selectAll);
+routes.get("/prodAll",prodController.selectAll);
+routes.get("/prodLimitedNumber/:number",prodController.selectLimitedNumber);
+routes.get("/prodLimitedNumberOn/:number",prodController.selectLimitedNumberOn);
 routes.get("/pordFirstHundred",prodController.selectFirstHundred);
-routes.get("/prodStatusOn",prodController.selectWhereStatusOn);
 routes.get("/prodFirstHundredStatusOn",prodController.selectFirstHundredStatusOn);
 routes.get("/prodId/:cod_prod",prodController.selectById);
 
 routes.put("/imagem/:id",multer(multerConfig).single("img_prod"),prodController.insertCaminhoImagemProduto);
 
-routes.patch("/updateProd",prodController.update);
+routes.patch("/prodUpdate",prodController.update);
 
-routes.post("/addProd",prodController.insert);
+routes.post("/prodAdd",prodController.insert);
 
-routes.delete("/delProd",prodController.delete);
+routes.delete("/prodDel",prodController.delete);
 
 /** Rotas Imagem */
 

@@ -13,6 +13,35 @@ module.exports = {
         return res.json(allProd);
     },
 
+    async selectLimitedNumber(req, res) {
+
+        console.log("\n----------------- GET BY LIMITED NUMBER -----------------");
+
+        const num = parseInt(req.params.number)
+
+        let query = await Produto.findAll({
+            order: [['cod_prod', 'DESC']],
+            limit: num
+        });
+
+        return res.json(query);
+    },
+
+    async selectLimitedNumberOn(req, res) {
+
+        console.log("\n----------------- GET BY LIMITED NUMBER WITH STATUS ON -----------------");
+
+        const num = parseInt(req.params.number)
+
+        let prodStatus = await Produto.findAll({
+            where: { status_prod: 1 },
+            order: [['cod_prod', 'DESC']],
+            limit: num
+        });
+
+        return res.json(prodStatus);
+    },
+
     async selectFirstHundred(req, res) {
 
         console.log("\n----------------- GET BY FIRST HUNDRED -----------------");
@@ -25,12 +54,25 @@ module.exports = {
         return res.json(prodStatus);
     },
 
-    async selectWhereStatusOn(req, res) {
+    async selectStatusOn(req, res) {
 
         console.log("----------------- GET BY STATUS -----------------\n");
 
         let prodStatus = await Produto.findAll({
             where: { status_prod: 1 }
+        });
+
+        return res.json(prodStatus);
+    },
+
+    async selectFirstHundredStatusOn(req, res) {
+
+        console.log("\n----------------- GET BY FIRST HUNDRED WITH STATUS ON -----------------");
+
+        let prodStatus = await Produto.findAll({
+            where: { status_prod: 1 },
+            order: [['cod_prod', 'DESC']],
+            limit: 100
         });
 
         return res.json(prodStatus);
