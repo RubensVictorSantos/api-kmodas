@@ -2,7 +2,8 @@ const multer = require("multer");
 const crypto = require("crypto");
 const path = require("path");
 const fs = require("fs");
-const dir =  "C:\\Users\\Rubens\\Desktop\\pessoal\\kmodas\\img"
+// const dir =  "C:\\Users\\Rubens\\Desktop\\pessoal\\kmodas\\img"
+const dir =  "C:\\Users\\karine\\Desktop\\kmodas\\img"
 
 if(!fs.existsSync(dir)){
     fs.mkdirSync(dir);
