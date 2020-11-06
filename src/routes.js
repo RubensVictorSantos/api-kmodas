@@ -7,20 +7,20 @@ const routes = express.Router();
 
 /** Rotas Produtos */
 
-routes.get("/prodAll",prodController.selectAll);
-routes.get("/prodLimitedNumber/:number",prodController.selectLimitedNumber);
-routes.get("/prodLimitedNumberOn/:number",prodController.selectLimitedNumberOn);
-routes.get("/pordFirstHundred",prodController.selectFirstHundred);
-routes.get("/prodFirstHundredStatusOn",prodController.selectFirstHundredStatusOn);
-routes.get("/prodId/:cod_prod",prodController.selectById);
+routes.get("/prod-All",prodController.selectAll);
+routes.get("/prod-LimitedNumber/:number",prodController.selectLimitedNumber);
+routes.get("/prod-LimitedNumberOn/:number",prodController.selectLimitedNumberOn);
+routes.get("/pord-FirstHundred",prodController.selectFirstHundred);
+routes.get("/prod-FirstHundredStatusOn",prodController.selectFirstHundredStatusOn);
+routes.get("/prod-Id/:cod_prod",prodController.selectById);
 
 routes.put("/imagem/:id",multer(multerConfig).single("img_prod"),prodController.insertCaminhoImagemProduto);
 
-routes.patch("/prodUpdate",prodController.update);
+routes.patch("/prod-Update",prodController.update);
 
-routes.post("/prodAdd",prodController.insert);
+routes.post("/prod-Add",prodController.insert);
 
-routes.delete("/prodDel",prodController.delete);
+routes.delete("/prod-Del",prodController.delete);
 
 /** Rotas Imagem */
 
