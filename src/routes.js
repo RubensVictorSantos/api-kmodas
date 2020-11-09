@@ -10,9 +10,7 @@ const routes = express.Router();
 routes.get("/prod-All",prodController.selectAll);
 routes.get("/prod-LimitedNumber/:number",prodController.selectLimitedNumber);
 routes.get("/prod-LimitedNumberOn/:number",prodController.selectLimitedNumberOn);
-routes.get("/pord-FirstHundred",prodController.selectFirstHundred);
-routes.get("/prod-FirstHundredStatusOn",prodController.selectFirstHundredStatusOn);
-routes.get("/prod-Id/:cod_prod",prodController.selectById);
+routes.get("/prod-Id/:cod_prod",prodController.selectById); 
 
 routes.put("/imagem/:id",multer(multerConfig).single("img_prod"),prodController.insertCaminhoImagemProduto);
 
