@@ -2,10 +2,12 @@ const express = require('express');
 const multer = require("multer");
 const multerConfig = require("./config/Multer");
 const prodController = require('./controllers/ProdController');
+const userController = require('./controllers/UserController');
 const imagemController = require('./controllers/ImgController');
 
 const jwt = require('jsonwebtoken');
 require("dotenv-safe").config();
+require("dotenv").config()
 
 const routes = express.Router();
 
@@ -22,6 +24,14 @@ function verifyJWT(req, res, next) {
     });
 }
 
+
+/** Rotas User */
+
+routes.get('/logout', userController.logout);
+routes.get("/user-Id", userController.selectById);
+
+routes.post("/login", userController.login);
+routes.post("/user-Add", userController.insert);
 
 /** Rotas Produtos */
 

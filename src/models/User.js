@@ -10,8 +10,8 @@ class Usuario extends Model{
             },
             nome : DataTypes.STRING,
             email: DataTypes.STRING,
-            senha:DataTypes.STRING,
-            id_nivel:DataTypes.INTEGER
+            senha: DataTypes.STRING,
+            id_nivel: DataTypes.INTEGER
         },
         {
             sequelize,
