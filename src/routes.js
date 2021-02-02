@@ -24,7 +24,6 @@ function verifyJWT(req, res, next) {
     });
 }
 
-
 /** Rotas User */
 
 routes.get('/logout', userController.logout);
