@@ -1,17 +1,21 @@
 const { Sequelize } = require("sequelize");
-const con = require("./configdb") 
+require("dotenv-safe").config();
 
-const sequelize = new Sequelize(con.database, con.user, con.password, {
-    host: con.host,
-    dialect: "mysql",
-    define: {
-        underscored: true,
-        timestamps: false
-    }
-});
+const sequelize = new Sequelize( 
+    process.env.DB_NAME,
+    process.env.DB_USER,
+    process.env.DB_PASS, {
+        host: process.env.DB_HOST,
+        port: process.env.DB_PORT,
+        dialect: 'mysql',
+        define: {
+            underscored: true,
+            timestamps: false
+        }
+    })
 
 try {
-    
+
     console.log("\n Database connection success!\n");
 
 } catch (error) {

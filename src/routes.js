@@ -1,13 +1,12 @@
 const express = require('express');
 const multer = require("multer");
+const jwt = require('jsonwebtoken');
+require("dotenv-safe").config();
+
 const multerConfig = require("./config/Multer");
 const prodController = require('./controllers/ProdController');
 const userController = require('./controllers/UserController');
 const imagemController = require('./controllers/ImgController');
-
-const jwt = require('jsonwebtoken');
-require("dotenv-safe").config();
-require("dotenv").config()
 
 const routes = express.Router();
 
