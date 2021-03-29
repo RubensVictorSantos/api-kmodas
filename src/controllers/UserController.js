@@ -55,9 +55,16 @@ module.exports = {
 
     async selectById(req, res) {
         const id = req.params.id;
-        const usuario = Usuario.findByPk(id);
+        const usuario = await Usuario.findByPk(id);
 
         return res.json(usuario);
+    },
+
+    async selectAll(req, res) {
+
+        let allUser = await Usuario.findAll({order: [['nome', 'DESC']]});
+
+        return res.json(allUser);
     },
 
     async insert(req, res) {

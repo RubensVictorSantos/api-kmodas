@@ -26,10 +26,11 @@ function verifyJWT(req, res, next) {
 /** Rotas User */
 
 routes.get('/logout', userController.logout);
-routes.get("/user-Id", userController.selectById);
+routes.get("/user/:id", userController.selectById);
+routes.get("/user", userController.selectAll);
 
 routes.post("/login", userController.login);
-routes.post("/user-Add", userController.insert);
+routes.post("/user", userController.insert);
 
 /** Rotas Produtos */
 
