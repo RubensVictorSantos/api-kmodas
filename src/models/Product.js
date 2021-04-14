@@ -1,27 +1,27 @@
 const { Model, DataTypes } = require("sequelize");
 
-class Produto extends Model{
+class Product extends Model{
     static init(sequelize){
         super.init(
             {
-                cod_prod:{
+                cod_produto:{
                     type:DataTypes.INTEGER,
                     primaryKey:true,
                     autoIncrement:true
                 },
-                nome_prod:DataTypes.STRING,
-                img_prod:DataTypes.STRING,
-                preco_prod:DataTypes.DECIMAL,
-                descricao_prod:DataTypes.STRING,
-                status_prod:DataTypes.CHAR,
+                nome:DataTypes.STRING,
+                imagem:DataTypes.STRING,
+                preco:DataTypes.DECIMAL,
+                descricao:DataTypes.STRING,
+                status:DataTypes.CHAR,
             },
             {
                 sequelize,
                 modelName:"Produto",
-                tableName:"tbl_produto",
+                tableName:"tbproduto",
             }
         )
     }
 }
 
-module.exports = Produto;
+module.exports = Product;

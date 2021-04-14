@@ -1,42 +1,33 @@
 const brcypt = require("bcryptjs");
 const jwt = require('jsonwebtoken');
 
-const Usuario = require("../models/User");
+const User = require("../models/User");
 const connection = require("../database");
 
-Usuario.init(connection);
+User.init(connection);
 
 module.exports = {
 
     async login(req, res) {
         const { email, senha } = req.body;
 
-        console.log(
-            "\n|************************************************************" +
-            "\n|Email: " + email +
-            "\n|Senha: " + senha +
-            "\n|************************************************************\n"
-        )
+        const user = await User.findOne({ where: { email } });
 
-        const usuario = await Usuario.findOne({ where: { email } });
+        const userStringify = JSON.stringify(user);
 
-        const usuarioStringify = JSON.stringify(usuario);
+        const userJSON = JSON.parse(userStringify);
 
-        const usuarioJSON = JSON.parse(usuarioStringify);
+        if (userJSON) {
+            if (brcypt.compareSync(senha, userJSON.senha)) {
 
-        console.log("\n Usuario: " + usuarioStringify)
-
-        if (usuarioJSON) {
-            if (brcypt.compareSync(senha, usuarioJSON.senha)) {
-
-                const id = usuarioJSON.id_usuario;
+                const id = userJSON.cod_usuario;
 
                 // auth ok
                 const token = jwt.sign({ id }, process.env.SECRET, {
                     expiresIn: 300 // expires in 5min
                 });
 
-                return res.json({ usuario: usuario, auth: true, token: token });
+                return res.json({ user: user, auth: true, token: token });
 
             } else {
                 return res.json({ status: "Senhas não correspondem" });
@@ -48,33 +39,29 @@ module.exports = {
     },
 
     async logout(req, res) {
-
-        console.log("----------------- LOGOUT -----------------\n");
         return res.status(200).send({ auth: false, token: null })
     },
 
     async selectById(req, res) {
         const id = req.params.id;
-        const usuario = await Usuario.findByPk(id);
+        const user = await User.findByPk(id);
 
-        return res.json(usuario);
+        return res.json(user);
     },
 
     async selectAll(req, res) {
 
-        let allUser = await Usuario.findAll({order: [['nome', 'DESC']]});
+        let allUser = await User.findAll({order: [['nome', 'DESC']]});
 
         return res.json(allUser);
     },
 
     async insert(req, res) {
-        const { nome, email, senha, id_nivel } = req.body;
+        const { nome, email, senha, cod_nivel } = req.body;
 
-        console.log(typeof (req.body.nome));
+        console.log(req.body);
 
-        const emailJaCadastrado = await Usuario.findOne({ where: { email } });
-
-        console.log(emailJaCadastrado)
+        const emailJaCadastrado = await User.findOne({ where: { email } });
 
         if (emailJaCadastrado == null) {
 
@@ -82,8 +69,8 @@ module.exports = {
 
             const senhaCripto = brcypt.hashSync(senha, salt);
 
-            const usuarioCriado = await Usuario.create({
-                nome, email, senha: senhaCripto, id_nivel
+            const usuarioCriado = await User.create({
+                nome, email, senha: senhaCripto, id_nivel: cod_nivel
             });
 
             return res.json(usuarioCriado);
@@ -91,8 +78,6 @@ module.exports = {
         } else {
             return res.json({ status: "email já cadastrado" });
         }
-
-
 
     },
       

@@ -4,9 +4,9 @@ const jwt = require('jsonwebtoken');
 require("dotenv-safe").config();
 
 const multerConfig = require("./config/Multer");
-const prodController = require('./controllers/ProdController');
+const productController = require('./controllers/ProductController');
 const userController = require('./controllers/UserController');
-const imagemController = require('./controllers/ImgController');
+const imageController = require('./controllers/ImageController');
 
 const routes = express.Router();
 
@@ -34,21 +34,21 @@ routes.post("/user", userController.insert);
 
 /** Rotas Produtos */
 
-routes.get("/prod-All", prodController.selectAll);
-routes.get("/prod-LimitedNumber/:number", prodController.selectLimitedNumber);
-routes.get("/prod-LimitedNumberOn/:number", prodController.selectLimitedNumberOn);
-routes.get("/prod-Id/:cod_prod", prodController.selectById);
+routes.get("/prod-All", productController.selectAll);
+routes.get("/prod-LimitedNumber/:number", productController.selectLimitedNumber);
+routes.get("/prod-LimitedNumberOn/:number", productController.selectLimitedNumberOn);
+routes.get("/prod-Id/:cod_produto", productController.selectById);
 
-routes.put("/imagem/:id", multer(multerConfig).single("img_prod"), prodController.insertCaminhoImagemProduto);
+routes.put("/imagem/:id", multer(multerConfig).single("img_prod"), productController.insertCaminhoImagemProduto);
 
-routes.patch("/prod-Update", prodController.update);
+routes.patch("/prod-Update", productController.update);
 
-routes.post("/prod-Add", prodController.insert);
+routes.post("/prod-Add", productController.insert);
 
-routes.delete("/prod-Del", prodController.delete);
+routes.delete("/prod-Del", productController.delete);
 
 /** Rotas Imagem */
 
-routes.post("/insertimagem", multer(multerConfig).single("imagem"), imagemController.insert);
+routes.post("/insertimagem", multer(multerConfig).single("imagem"), imageController.insert);
 
 module.exports = routes;
