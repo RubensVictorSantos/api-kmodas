@@ -6,51 +6,74 @@ Product.init(connection);
 module.exports = {
     async selectAll(req, res) {
 
-        let allProd = await Product.findAll({order: [['cod_produto', 'DESC']]});
+        let product = await Product.findAll({
+            order: [['cod_produto', 'DESC']]
+        });
 
-        return res.json(allProd);
+        return res.json(product);
     },
 
-    async selectLimitedNumber(req, res) {
+    async selectLimit(req, res) {
 
-        const num = parseInt(req.params.number)
+        const limit = parseInt(req.params.limit)
+        const sort = req.params.sort
 
-        let query = await Product.findAll({
-            order: [['cod_produto', 'DESC']],
-            limit: num
+        const query = await Product.findAll({
+            order: [[sort, 'DESC']],
+            limit: limit
         });
 
         return res.json(query);
     },
 
-    async selectLimitedNumberOn(req, res) {
+    async selectStatus(req, res) {
 
-        const num = parseInt(req.params.number)
+        console.log('Entrou\n');
+
+        const status = parseInt(req.params.status)
+
+        if (isNaN(status)){
+            return res.status(400)
+                    .send({ 
+                        message: 'Error.' 
+                    }); 
+        }
 
         let prodStatus = await Product.findAll({
-            where: { status: 1 },
-            order: [['cod_produto', 'DESC']],
-            limit: num
+            where: { status: status }
         });
 
         return res.json(prodStatus);
     },
 
-    async selectAllStatusOn(req, res) {
+    async selectStatusLimit(req, res) {
+
+        const status = parseInt(req.params.status);
+        const limit = parseInt(req.params.limit);
+
+        if (isNaN(status)){
+            return res.status(400)
+                    .send({ 
+                        message: 'Error.' 
+                    }); 
+        }
 
         let prodStatus = await Product.findAll({
-            where: { status: 1 }
+            where: { status: status },
+            limit: limit
+
         });
 
         return res.json(prodStatus);
     },
 
     async selectById(req, res) {
-        const id = req.params.cod_produto;
 
-        const prod = await Product.findByPk(id);
+        const id = req.params.id;
 
-        return res.json(prod);
+        const product = await Product.findByPk(id);
+
+        return res.json(product);
     },
 
     async insert(req, res) {

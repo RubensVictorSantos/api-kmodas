@@ -13,6 +13,9 @@ class Product extends Model{
                 imagem:DataTypes.STRING,
                 preco:DataTypes.DECIMAL,
                 descricao:DataTypes.STRING,
+                modelo:DataTypes.STRING,
+                cor:DataTypes.STRING,
+                tamanho:DataTypes.STRING,
                 status:DataTypes.CHAR,
             },
             {

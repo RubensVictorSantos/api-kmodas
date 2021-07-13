@@ -42,6 +42,7 @@ module.exports = {
         return res.status(200).send({ auth: false, token: null })
     },
 
+    /**  */
     async selectById(req, res) {
         const id = req.params.id;
         const user = await User.findByPk(id);
@@ -58,8 +59,6 @@ module.exports = {
 
     async insert(req, res) {
         const { nome, email, senha, cod_nivel } = req.body;
-
-        console.log(req.body);
 
         const emailJaCadastrado = await User.findOne({ where: { email } });
 

@@ -23,32 +23,44 @@ function verifyJWT(req, res, next) {
     });
 }
 
-/** Rotas User */
+/************************* Rotas User ************************/
 
+/** GET */
 routes.get('/logout', userController.logout);
-routes.get("/user/:id", userController.selectById);
-routes.get("/user", userController.selectAll);
+routes.get("/users/:id", userController.selectById);
+routes.get("/users", userController.selectAll);
 
+/** POST */
 routes.post("/login", userController.login);
-routes.post("/user", userController.insert);
+routes.post("/users", userController.insert);
 
-/** Rotas Produtos */
+/** PUT */
 
-routes.get("/prod-All", productController.selectAll);
-routes.get("/prod-LimitedNumber/:number", productController.selectLimitedNumber);
-routes.get("/prod-LimitedNumberOn/:number", productController.selectLimitedNumberOn);
-routes.get("/prod-Id/:cod_produto", productController.selectById);
+/** DELETE */
 
+/*********************** Rotas Produtos ************************/
+
+/** GET */
+routes.get('/products', productController.selectAll);
+routes.get('/products/id=:id', productController.selectById);
+routes.get('/products/sort=:sort&limit=:limit', productController.selectLimit);
+routes.get("/products/status=:status", productController.selectStatus);
+routes.get("/products/status=:status/limit=:limit", productController.selectStatusLimit);
+
+/** POST */
+routes.post("/products", productController.insert);
+
+/** PUT */
 routes.put("/imagem/:id", multer(multerConfig).single("img_prod"), productController.insertCaminhoImagemProduto);
 
-routes.patch("/prod-Update", productController.update);
+/** DELETE */
+routes.delete("/products", productController.delete);
 
-routes.post("/prod-Add", productController.insert);
-
-routes.delete("/prod-Del", productController.delete);
+/** PATCH */
+routes.patch("/products", productController.update);
 
 /** Rotas Imagem */
 
-routes.post("/insertimagem", multer(multerConfig).single("imagem"), imageController.insert);
+// routes.post("/insertimagem", multer(multerConfig).single("imagem"), imageController.insert);
 
 module.exports = routes;
