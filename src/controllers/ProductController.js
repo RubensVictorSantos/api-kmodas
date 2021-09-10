@@ -92,13 +92,15 @@ module.exports = {
 
     async insertCaminhoImagemProduto(req, res) {
 
-        const cod_prod = req.params.id;
-        const produto = await Product.findByPk(cod_prod);
+        const cod_produto = req.params.id;
+        const produto = await Product.findByPk(cod_produto);
+
+        console.log(req.file.filename);
 
         await Product.update({
-            img_prod: req.file.filename
+            imagem: req.file.filename
         },{
-            where: {cod_prod}
+            where: {cod_produto}
         });
 
         return res.json(produto);

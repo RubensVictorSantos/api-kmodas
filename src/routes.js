@@ -51,7 +51,7 @@ routes.get("/products/status=:status/limit=:limit", productController.selectStat
 routes.post("/products", productController.insert);
 
 /** PUT */
-routes.put("/imagem/:id", multer(multerConfig).single("img_prod"), productController.insertCaminhoImagemProduto);
+routes.put("/products/image/:id", multer(multerConfig).single("image"), productController.insertCaminhoImagemProduto);
 
 /** DELETE */
 routes.delete("/products", productController.delete);

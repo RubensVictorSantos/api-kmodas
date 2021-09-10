@@ -18,6 +18,9 @@ module.exports = {
         const userJSON = JSON.parse(userStringify);
 
         if (userJSON) {
+
+            console.log(userJSON);
+
             if (brcypt.compareSync(senha, userJSON.senha)) {
 
                 const id = userJSON.cod_usuario;
@@ -30,11 +33,11 @@ module.exports = {
                 return res.json({ user: user, auth: true, token: token });
 
             } else {
-                return res.json({ status: "Senhas não correspondem" });
+                return res.json({ error: "Usuário e/ou senha inválido(s)" });
 
             }
         } else {
-            return res.json({ status: "Usuário não existe" });
+            return res.json({ error: "Usuário não existe" });
         }
     },
 

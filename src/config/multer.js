@@ -2,7 +2,10 @@ const multer = require("multer");
 const crypto = require("crypto");
 const path = require("path");
 const fs = require("fs");
-const dir = "C:\\Users\\Rubens\\Desktop\\pessoal\\kmodas\\img"
+const dir = "C:\\img"
+
+// "C:\\kmodas\\temp\\uploads"
+// "C:\Users\Realbras\Desktop\Pessoal\kmodas\web-kmodas"
 
 /** Verificando se existe o diretório apontado, se não existir vai ser criado um*/
 if (!fs.existsSync(dir)) { fs.mkdirSync(dir) }
