@@ -32,11 +32,11 @@ module.exports = {
 
         const status = parseInt(req.params.status)
 
-        if (isNaN(status)){
+        if (isNaN(status)) {
             return res.status(400)
-                    .send({ 
-                        message: 'Error.' 
-                    }); 
+                .send({
+                    message: 'Error.'
+                });
         }
 
         let prodStatus = await Product.findAll({
@@ -51,11 +51,11 @@ module.exports = {
         const status = parseInt(req.params.status);
         const limit = parseInt(req.params.limit);
 
-        if (isNaN(status)){
+        if (isNaN(status)) {
             return res.status(400)
-                    .send({ 
-                        message: 'Error.' 
-                    }); 
+                .send({
+                    message: 'Error.'
+                });
         }
 
         let prodStatus = await Product.findAll({
@@ -77,7 +77,7 @@ module.exports = {
     },
 
     async insert(req, res) {
-        const { nome, preco, imagem, descricao, status} = req.body
+        const { nome, preco, imagem, descricao, status } = req.body
 
         const newProd = await Product.create({
             nome,
@@ -95,33 +95,35 @@ module.exports = {
         const cod_produto = req.params.id;
         const produto = await Product.findByPk(cod_produto);
 
-        console.log(req.file.filename);
-
         await Product.update({
             imagem: req.file.filename
-        },{
-            where: {cod_produto}
-        });
+        }, {
+            where: { cod_produto }
+        })
 
         return res.json(produto);
     },
 
-    async update(req, res) {
+    async update(req, res, next) {
         const { cod_produto, nome, imagem, descricao, preco, status } = req.body;
 
-        const atualizar = await Product.update({
+        await Product.update({
             nome,
             imagem,
             descricao,
             preco,
             status,
+
         }, {
-            where: { cod_produto: cod_produto }
-        })
+            where: { 
+                cod_produto: cod_produto 
+            }
 
-        const ProdutoUpdated = await Product.findByPk(cod_produto);
+        });
 
-        return res.json(ProdutoUpdated);
+        const produto = await Product.findByPk(cod_produto);
+        return res.json(produto);
+
     },
 
     async delete(req, res) {

@@ -19,8 +19,6 @@ module.exports = {
 
         if (userJSON) {
 
-            console.log(userJSON);
-
             if (brcypt.compareSync(senha, userJSON.senha)) {
 
                 const id = userJSON.cod_usuario;
