@@ -4,46 +4,30 @@ const connection = require("../database");
 Product.init(connection);
 
 module.exports = {
-    async selectAll(req, res) {
+    async getProducts(req, res) {
+        let products = await Product.findAll();
+        return res.json(products);
 
-        let product = await Product.findAll({
-            order: [['cod_produto', 'DESC']]
-        });
-
-        return res.json(product);
     },
 
-    async selectLimit(req, res) {
-
+    async getProductsLimit(req, res) {
         const limit = parseInt(req.params.limit)
         const sort = req.params.sort
 
-        const query = await Product.findAll({
+        const products = await Product.findAll({
             order: [[sort, 'DESC']],
             limit: limit
         });
-
-        return res.json(query);
+        return res.json(products);
     },
 
-    async selectStatus(req, res) {
-
-        console.log('Entrou\n');
-
-        const status = parseInt(req.params.status)
-
-        if (isNaN(status)) {
-            return res.status(400)
-                .send({
-                    message: 'Error.'
-                });
-        }
-
-        let prodStatus = await Product.findAll({
+    async getProductsByStatus(req, res) {
+        const status = req.params.status
+        const products = await Product.findAll({
             where: { status: status }
         });
 
-        return res.json(prodStatus);
+        return res.json(products);
     },
 
     async selectStatusLimit(req, res) {
@@ -67,10 +51,8 @@ module.exports = {
         return res.json(prodStatus);
     },
 
-    async selectById(req, res) {
-
+    async getProductsById(req, res) {
         const id = req.params.id;
-
         const product = await Product.findByPk(id);
 
         return res.json(product);
@@ -92,16 +74,27 @@ module.exports = {
 
     async insertCaminhoImagemProduto(req, res) {
 
-        const cod_produto = req.params.id;
-        const produto = await Product.findByPk(cod_produto);
+        // const cod_produto = req.params.id;
+        // const imagem = req.file.filename;
+        // const produto = await Product.findByPk(cod_produto);
+        try {
+            const produto = await Product.update({
+                imagem: req.file.filename
+            }, {
+                where: { cod_produto : req.params.id }
+            })
 
-        await Product.update({
-            imagem: req.file.filename
-        }, {
-            where: { cod_produto }
-        })
+            return res.json(produto);
 
-        return res.json(produto);
+        } catch (error) {
+
+            console.log("Entrou catch");
+
+            return res.status(500).send({
+                message:
+                    error.message || "Error"
+            });
+        }
     },
 
     async update(req, res, next) {
@@ -115,8 +108,8 @@ module.exports = {
             status,
 
         }, {
-            where: { 
-                cod_produto: cod_produto 
+            where: {
+                cod_produto: cod_produto
             }
 
         });
@@ -127,10 +120,35 @@ module.exports = {
     },
 
     async delete(req, res) {
-        const codProd = req.params.cod_prod;
+        const codProd = req.params.id;
 
-        const prod = await Product.findByPk(codProd);
+        const prod = await Product.destroy({
+            where: { cod_produto: codProd }
+        });
 
         return res.json(prod);
+    },
+
+    async selectPagination(req, res) {
+        const { offset, limit } = req.params;
+
+        if (isNaN(offset)) {
+            return res.status(400)
+                .send({
+                    message: 'Error.'
+                });
+        }
+
+        let prodStatus = await Product.findAndCountAll({
+            offset: parseInt(offset),
+            limit: parseInt(limit)
+        }).catch(error => {
+            res.status(500).send({
+                message:
+                    error.message || "Some error occurred while creating the Tutorial."
+            });
+        });
+
+        return res.json(prodStatus);
     }
 }

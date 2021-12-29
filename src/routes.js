@@ -41,11 +41,12 @@ routes.post("/users", userController.insert);
 /*********************** Rotas Produtos ************************/
 
 /** GET */
-routes.get('/products', productController.selectAll);
-routes.get('/products/id=:id', productController.selectById);
-routes.get('/products/sort=:sort&limit=:limit', productController.selectLimit);
-routes.get("/products/status=:status", productController.selectStatus);
+routes.get("/products", productController.getProducts);
+routes.get("/products/id=:id", productController.getProductsById);
+routes.get("/products/sort=:sort&limit=:limit", productController.getProductsLimit);
+routes.get("/products/status=:status", productController.getProductsByStatus);
 routes.get("/products/status=:status/limit=:limit", productController.selectStatusLimit);
+routes.get("/products/limit=:limit/offset=:offset", productController.selectPagination);
 
 /** POST */
 routes.post("/products", productController.insert);
@@ -54,7 +55,7 @@ routes.post("/products", productController.insert);
 routes.put("/products/image/:id", multer(multerConfig).single("image"), productController.insertCaminhoImagemProduto);
 
 /** DELETE */
-routes.delete("/products", productController.delete);
+routes.delete("/products/id=:id", productController.delete);
 
 /** PATCH */
 routes.patch("/products", productController.update);

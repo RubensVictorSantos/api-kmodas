@@ -6,7 +6,8 @@ class User extends Model{
             cod_usuario:{
                 type:DataTypes.INTEGER,
                 primaryKey:true,
-                autoIncrement:true
+                autoIncrement:true,
+                allowNull: false
             },
             nome : DataTypes.STRING,
             email: DataTypes.STRING,

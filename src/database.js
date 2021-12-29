@@ -15,7 +15,6 @@ const sequelize = new Sequelize(
     })
 
 try {
-
     console.log("\n Database connection success!\n");
 
 } catch (error) {

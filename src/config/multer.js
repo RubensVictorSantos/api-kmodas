@@ -2,9 +2,8 @@ const multer = require("multer");
 const crypto = require("crypto");
 const path = require("path");
 const fs = require("fs");
-const dir = "C:\\img"
-
-// "C:\\kmodas\\temp\\uploads"
+const dir = "C:\\kmodas\\temp\\uploads"
+console.log("entrei");
 // "C:\Users\Realbras\Desktop\Pessoal\kmodas\web-kmodas"
 
 /** Verificando se existe o diretório apontado, se não existir vai ser criado um*/
