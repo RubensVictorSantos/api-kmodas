@@ -18,7 +18,7 @@ try {
     console.log("\n Database connection success!\n");
 
 } catch (error) {
-    console.log("\n Database connection fail: ", error);
+    console.log("\n Database connection fail: ", error,"\n");
 
 }
 

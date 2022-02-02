@@ -4,13 +4,20 @@ const connection = require("../database");
 Product.init(connection);
 
 module.exports = {
-    async getProducts(req, res) {
-        let products = await Product.findAll();
+    async products(req, res) {
+        const products = await Product.findAll();
         return res.json(products);
 
     },
 
-    async getProductsLimit(req, res) {
+    async productById(req, res) {
+        const { id } = req.params;
+        const product = await Product.findByPk(id);
+        return res.json(product);
+
+    },
+
+    async productsLimit(req, res) {
         const limit = parseInt(req.params.limit)
         const sort = req.params.sort
 
@@ -21,7 +28,7 @@ module.exports = {
         return res.json(products);
     },
 
-    async getProductsByStatus(req, res) {
+    async productsByStatus(req, res) {
         const status = req.params.status
         const products = await Product.findAll({
             where: { status: status }
@@ -30,7 +37,7 @@ module.exports = {
         return res.json(products);
     },
 
-    async selectStatusLimit(req, res) {
+    async productsByStatusLimit(req, res) {
 
         const status = parseInt(req.params.status);
         const limit = parseInt(req.params.limit);
@@ -51,17 +58,46 @@ module.exports = {
         return res.json(prodStatus);
     },
 
-    async getProductsById(req, res) {
-        const id = req.params.id;
-        const product = await Product.findByPk(id);
+    async productsPagination(req, res) {
 
-        return res.json(product);
+        try {
+
+            const { offset, limit } = req.params;
+
+            console.log([
+                {
+                    'offset' : offset
+                },
+                {
+                    'limit' : limit
+                }]
+            );
+
+            // if (isNaN(offset) || isNaN(limit)) throw new Error("Parametro inválido!");
+
+            // if ((parseInt(limit) < 0) || (parseInt(offset) < 0)) throw new Error("Parametro 'limit' não pode ser menor que zero!");
+
+            const products = await Product.findAndCountAll({
+                offset: parseInt(offset),
+                limit: parseInt(limit)
+            })
+
+            return res.json(products);
+        } catch (error) {
+            return res.status(500).json({
+                error: {
+                    code: '500',
+                    message: error.message
+                },
+                payload: null
+            });
+        }
     },
 
-    async insert(req, res) {
+    async createProduct(req, res) {
         const { nome, preco, imagem, descricao, status } = req.body
 
-        const newProd = await Product.create({
+        const newProducts = await Product.create({
             nome,
             preco,
             imagem,
@@ -69,35 +105,33 @@ module.exports = {
             status
         });
 
-        return res.json(newProd);
+        return res.json(newProducts);
     },
 
     async insertCaminhoImagemProduto(req, res) {
 
-        // const cod_produto = req.params.id;
-        // const imagem = req.file.filename;
-        // const produto = await Product.findByPk(cod_produto);
         try {
-            const produto = await Product.update({
-                imagem: req.file.filename
-            }, {
-                where: { cod_produto : req.params.id }
-            })
+            const produto = await Product.findOne({
+                atributes: ['imagem'],
+                where: { cod_produto: req.params.id }
+            });
+
+            if (!produto) throw new Error('Produto não encontrado, certifique-se de que os parametros estão corretos');
+
+            produto.imagem = req.file.filename;
+            produto.save();
 
             return res.json(produto);
 
         } catch (error) {
-
-            console.log("Entrou catch");
-
-            return res.status(500).send({
+            return res.status(400).send({
                 message:
-                    error.message || "Error"
+                    error.message
             });
         }
     },
 
-    async update(req, res, next) {
+    async updateProduct(req, res, next) {
         const { cod_produto, nome, imagem, descricao, preco, status } = req.body;
 
         await Product.update({
@@ -119,36 +153,13 @@ module.exports = {
 
     },
 
-    async delete(req, res) {
-        const codProd = req.params.id;
+    async deleteProduct(req, res) {
+        const id = req.params.id;
 
-        const prod = await Product.destroy({
-            where: { cod_produto: codProd }
+        const product = await Product.destroy({
+            where: { cod_produto: id }
         });
 
-        return res.json(prod);
+        return res.json(product);
     },
-
-    async selectPagination(req, res) {
-        const { offset, limit } = req.params;
-
-        if (isNaN(offset)) {
-            return res.status(400)
-                .send({
-                    message: 'Error.'
-                });
-        }
-
-        let prodStatus = await Product.findAndCountAll({
-            offset: parseInt(offset),
-            limit: parseInt(limit)
-        }).catch(error => {
-            res.status(500).send({
-                message:
-                    error.message || "Some error occurred while creating the Tutorial."
-            });
-        });
-
-        return res.json(prodStatus);
-    }
 }

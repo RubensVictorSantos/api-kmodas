@@ -15,7 +15,9 @@ function verifyJWT(req, res, next) {
     if (!token) return res.status(401).send({ auth: false, message: 'No token provided.' });
 
     jwt.verify(token, process.env.SECRET, function (err, decoded) {
-        if (err) return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
+        if (err) return res.status(500).send({
+            auth: false, message: 'Failed to authenticate token.'
+        });
 
         // Se tudo estiver ok, salva no request para uso posterior
         req.userId = decoded.id;
@@ -41,27 +43,23 @@ routes.post("/users", userController.insert);
 /*********************** Rotas Produtos ************************/
 
 /** GET */
-routes.get("/products", productController.getProducts);
-routes.get("/products/id=:id", productController.getProductsById);
-routes.get("/products/sort=:sort&limit=:limit", productController.getProductsLimit);
-routes.get("/products/status=:status", productController.getProductsByStatus);
-routes.get("/products/status=:status/limit=:limit", productController.selectStatusLimit);
-routes.get("/products/limit=:limit/offset=:offset", productController.selectPagination);
+routes.get("/products", productController.products);
+routes.get("/products/id=:id", productController.productById);
+routes.get("/products/sort=:sort&limit=:limit", productController.productsLimit);
+routes.get("/products/status=:status", productController.productsByStatus);
+routes.get("/products/status=:status/limit=:limit", productController.productsByStatusLimit);
+routes.get("/products/limit=:limit/offset=:offset", productController.productsPagination);
 
 /** POST */
-routes.post("/products", productController.insert);
+routes.post("/products", productController.createProduct);
 
 /** PUT */
-routes.put("/products/image/:id", multer(multerConfig).single("image"), productController.insertCaminhoImagemProduto);
+routes.put("/image/:id", multer(multerConfig).single("image"), productController.insertCaminhoImagemProduto);
 
 /** DELETE */
-routes.delete("/products/id=:id", productController.delete);
+routes.delete("/products/id=:id", productController.deleteProduct);
 
 /** PATCH */
-routes.patch("/products", productController.update);
-
-/** Rotas Imagem */
-
-// routes.post("/insertimagem", multer(multerConfig).single("imagem"), imageController.insert);
+routes.patch("/products", productController.updateProduct);
 
 module.exports = routes;
