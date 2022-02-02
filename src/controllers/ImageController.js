@@ -1,4 +1,4 @@
-const Imagem = require('../models/Imagem');
+const Imagem = require('../models/Image');
 const connection = require('../database');
 
 Imagem.init(connection);

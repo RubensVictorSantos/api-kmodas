@@ -1,5 +1,4 @@
 .env
-.env.example
 /src/configdb.js
 
 /node_modules

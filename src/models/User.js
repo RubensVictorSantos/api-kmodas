@@ -1,24 +1,25 @@
 const {Model,DataTypes} = require("sequelize");
 
-class Usuario extends Model{
+class User extends Model{
     static init(sequelize){
         super.init({
-            id_usuario:{
+            cod_usuario:{
                 type:DataTypes.INTEGER,
                 primaryKey:true,
-                autoIncrement:true
+                autoIncrement:true,
+                allowNull: false
             },
             nome : DataTypes.STRING,
             email: DataTypes.STRING,
             senha: DataTypes.STRING,
-            id_nivel: DataTypes.INTEGER
+            cod_nivel: DataTypes.INTEGER
         },
         {
             sequelize,
             modelName:"Usuario",
-            tableName:"tbl_usuario"
+            tableName:"tbusuario"
         })
     }
 }
 
-module.exports = Usuario;
+module.exports = User;

@@ -1,13 +1,12 @@
 const express = require('express');
 const multer = require("multer");
-const multerConfig = require("./config/Multer");
-const prodController = require('./controllers/ProdController');
-const userController = require('./controllers/UserController');
-const imagemController = require('./controllers/ImgController');
-
 const jwt = require('jsonwebtoken');
 require("dotenv-safe").config();
-require("dotenv").config()
+
+const multerConfig = require("./config/Multer");
+const productController = require('./controllers/ProductController');
+const userController = require('./controllers/UserController');
+const imageController = require('./controllers/ImageController');
 
 const routes = express.Router();
 
@@ -16,7 +15,9 @@ function verifyJWT(req, res, next) {
     if (!token) return res.status(401).send({ auth: false, message: 'No token provided.' });
 
     jwt.verify(token, process.env.SECRET, function (err, decoded) {
-        if (err) return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
+        if (err) return res.status(500).send({
+            auth: false, message: 'Failed to authenticate token.'
+        });
 
         // Se tudo estiver ok, salva no request para uso posterior
         req.userId = decoded.id;
@@ -24,32 +25,41 @@ function verifyJWT(req, res, next) {
     });
 }
 
+/************************* Rotas User ************************/
 
-/** Rotas User */
-
+/** GET */
 routes.get('/logout', userController.logout);
-routes.get("/user-Id", userController.selectById);
+routes.get("/users/:id", userController.selectById);
+routes.get("/users", userController.selectAll);
 
+/** POST */
 routes.post("/login", userController.login);
-routes.post("/user-Add", userController.insert);
+routes.post("/users", userController.insert);
 
-/** Rotas Produtos */
+/** PUT */
 
-routes.get("/prod-All", prodController.selectAll);
-routes.get("/prod-LimitedNumber/:number", prodController.selectLimitedNumber);
-routes.get("/prod-LimitedNumberOn/:number", prodController.selectLimitedNumberOn);
-routes.get("/prod-Id/:cod_prod", prodController.selectById);
+/** DELETE */
 
-routes.put("/imagem/:id", multer(multerConfig).single("img_prod"), prodController.insertCaminhoImagemProduto);
+/*********************** Rotas Produtos ************************/
 
-routes.patch("/prod-Update", prodController.update);
+/** GET */
+routes.get("/products", productController.products);
+routes.get("/products/id=:id", productController.productById);
+routes.get("/products/sort=:sort&limit=:limit", productController.productsLimit);
+routes.get("/products/status=:status", productController.productsByStatus);
+routes.get("/products/status=:status/limit=:limit", productController.productsByStatusLimit);
+routes.get("/products/limit=:limit/offset=:offset", productController.productsPagination);
 
-routes.post("/prod-Add", prodController.insert);
+/** POST */
+routes.post("/products", productController.createProduct);
 
-routes.delete("/prod-Del", prodController.delete);
+/** PUT */
+routes.put("/image/:id", multer(multerConfig).single("image"), productController.insertCaminhoImagemProduto);
 
-/** Rotas Imagem */
+/** DELETE */
+routes.delete("/products/id=:id", productController.deleteProduct);
 
-routes.post("/insertimagem", multer(multerConfig).single("imagem"), imagemController.insert);
+/** PATCH */
+routes.patch("/products", productController.updateProduct);
 
 module.exports = routes;

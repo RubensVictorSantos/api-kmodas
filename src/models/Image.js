@@ -1,10 +1,10 @@
 const { Model, DataTypes } = require('sequelize');
 
-class Imagem extends Model{
+class Image extends Model{
     static init(sequelize){
         super.init(
             {
-                id_imagem: {
+                cod_imagem: {
                     type:DataTypes.INTEGER,
                     primaryKey: true,
                     autoIncrement: true
@@ -17,10 +17,10 @@ class Imagem extends Model{
             {
                 sequelize,
                 modelName: "Imagem",
-                tableName: "tbl_imagem"
+                tableName: "tbimagem"
             }
         )
     }
 }
 
-module.exports = Imagem;
+module.exports = Image;
