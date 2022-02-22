@@ -6,8 +6,6 @@ require("dotenv-safe").config();
 const multerConfig = require("./config/Multer");
 const productController = require('./controllers/ProductController');
 const userController = require('./controllers/UserController');
-const imageController = require('./controllers/ImageController');
-
 const routes = express.Router();
 
 function verifyJWT(req, res, next) {
@@ -29,12 +27,13 @@ function verifyJWT(req, res, next) {
 
 /** GET */
 routes.get('/logout', userController.logout);
-routes.get("/users/:id", userController.selectById);
-routes.get("/users", userController.selectAll);
+routes.get("/users/:id", userController.userById);
+routes.get("/users", userController.users);
+routes.get("/users/limit=:limit/offset=:offset", userController.usersPagination);
 
 /** POST */
 routes.post("/login", userController.login);
-routes.post("/users", userController.insert);
+routes.post("/user", userController.createUser);
 
 /** PUT */
 
